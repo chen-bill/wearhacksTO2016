@@ -13,7 +13,6 @@
         <link rel="stylesheet" type="text/css" href="components/angular-material/angular-material.css">
         <link rel="stylesheet" type="text/css" href="less/dashboard.less">
         <!-- endbuild -->
-        <!-- endbuild -->
         <!-- SCRIPTS -->
         <!-- build:js lib/js/main.min.js -->
         <script type="text/javascript" src="components/angular/angular.min.js"></script>

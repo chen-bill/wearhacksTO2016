@@ -14,6 +14,17 @@
     background-color: blue;
 }
 
+.cardTitle h3{
+    display: inline-block;
+}
+
+.sensorIcon{
+    float: right;
+    font-size: 25px;
+    padding: 0 10px;
+    line-height: 55px;
+}
+
 .profilePic{
     width: 30%;
     top: 50px;
@@ -21,12 +32,13 @@
     border-radius: 50%;
     float: left;
     box-sizing: border-box;
-    padding: 10px;
+    margin: 10px;
+    border: 0.5px solid black;
 }
 
 .cardBody{
     min-height: 150px;
-    width: 70%;
+    width: calc(70% - 20px);
     float: right;
     padding: 10px;
     font-size: 1.25em;
@@ -55,4 +67,14 @@ alert{
     color: black;
     border: 1px solid #F44336;
     padding: 7px;
+    width: 100%;
+    display: block;
+    cursor: pointer;
+}
+
+.green{
+    background-color: #4CAF50 !important;
+}
+.red{
+    background-color: #F44336 !important;
 }
