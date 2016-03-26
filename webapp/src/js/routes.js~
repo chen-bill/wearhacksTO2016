@@ -10,14 +10,14 @@ angular.module('RDash').config(['$stateProvider', '$urlRouterProvider',
         $urlRouterProvider.otherwise('/');
 
         // Application routes
-        //$stateProvider
-            //.state('index', {
-                //url: '/',
-                //templateUrl: 'templates/dashboard.html',
-            //})
-            //.state('tables', {
-                //url: '/tables',
-                //templateUrl: 'templates/tables.html'
-            //});
+        $stateProvider
+            .state('index', {
+                url: '/',
+                templateUrl: 'templates/dashboard.html',
+            })
+            .state('tables', {
+                url: '/tables',
+                templateUrl: 'templates/tables.html'
+            });
     }
 ]);
