@@ -27,12 +27,14 @@ import com.google.android.gms.location.LocationServices;
 import com.microsoft.band.BandClient;
 import com.microsoft.band.BandClientManager;
 import com.microsoft.band.BandException;
+import com.microsoft.band.BandIOException;
 import com.microsoft.band.BandInfo;
 import com.microsoft.band.ConnectionState;
 import com.microsoft.band.UserConsent;
 import com.microsoft.band.sensors.BandHeartRateEvent;
 import com.microsoft.band.sensors.BandHeartRateEventListener;
 import com.microsoft.band.sensors.HeartRateConsentListener;
+import com.microsoft.band.sensors.HeartRateQuality;
 
 import java.io.IOException;
 import java.lang.ref.WeakReference;
@@ -49,6 +51,7 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
     TextView curAdd;
     Button btnStart;
     Button updateLocation;
+    Button btnStop;
 
     Firebase mikelocRef;
     Firebase mikerateRef;
@@ -58,6 +61,8 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
     GoogleApiClient mGoogleApiClient;
     Location mLastLocation;
 
+    long lastTimeStamp = 0;
+    long currentTimeStamp = 0;
 
     private LocationRequest mLocationRequest;
 
@@ -81,6 +86,7 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
         heartRateView = (TextView) findViewById(R.id.sensorData);
 
         btnStart = (Button) findViewById(R.id.startButton);
+        btnStop = (Button) findViewById(R.id.stopButton);
 
         updateLocation = (Button) findViewById(R.id.updateLocation);
 
@@ -116,6 +122,17 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
             public void onClick(View v) {
                 heartRateView.setText("");
                 new HeartRateSubscriptionTask().execute();
+            }
+        });
+
+        btnStop.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                try {
+                    client.getSensorManager().unregisterHeartRateEventListener(mHeartRateEventListener);
+                } catch (BandIOException e) {
+                    e.printStackTrace();
+                }
             }
         });
 
@@ -164,6 +181,14 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
                 appendToUI(String.format("Heart Rate = %d beats per minute\n"
                         + "Quality = %s\n", event.getHeartRate(), event.getQuality()));
 
+                if (getCurrentTime() >= currentTimeStamp+5){
+                    currentTimeStamp = getCurrentTime();
+                    if(event.getQuality() == HeartRateQuality.LOCKED){
+                        mikerateRef.child(Long.toString(currentTimeStamp)).setValue(event.getHeartRate());
+                    }else{
+                        mikerateRef.child(Long.toString(currentTimeStamp)).setValue(-1);
+                    }
+                }
             }
         }
     };
@@ -203,7 +228,7 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
             Geocoder geocoder = new Geocoder(this, Locale.getDefault());
             Address address = geocoder.getFromLocation(mLastLocation.getLatitude(), mLastLocation.getLongitude(),1).get(0);
 
-            curAdd.append(address.getAddressLine(0));
+            curAdd.setText("Current Address: " + address.getAddressLine(0));
 
         } else {
             Log.d("Log", "Location last null");
@@ -277,43 +302,7 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
         }
     }
 
-//    private class HeartRateConsentTask extends AsyncTask<WeakReference<Activity>, Void, Void> {
-//        @Override
-//        protected Void doInBackground(WeakReference<Activity>... params) {
-//            try {
-//                if (getConnectedBandClient()) {
-//
-//                    if (params[0].get() != null) {
-//                        client.getSensorManager().requestHeartRateConsent(params[0].get(), new HeartRateConsentListener() {
-//                            @Override
-//                            public void userAccepted(boolean consentGiven) {
-//                            }
-//                        });
-//                    }
-//                } else {
-//                    appendToUI("Band isn't connected. Please make sure bluetooth is on and the band is in range.\n");
-//                }
-//            } catch (BandException e) {
-//                String exceptionMessage="";
-//                switch (e.getErrorType()) {
-//                    case UNSUPPORTED_SDK_VERSION_ERROR:
-//                        exceptionMessage = "Microsoft Health BandService doesn't support your SDK Version. Please update to latest SDK.\n";
-//                        break;
-//                    case SERVICE_ERROR:
-//                        exceptionMessage = "Microsoft Health BandService is not available. Please make sure Microsoft Health is installed and that you have the correct permissions.\n";
-//                        break;
-//                    default:
-//                        exceptionMessage = "Unknown error occured: " + e.getMessage() + "\n";
-//                        break;
-//                }
-//                appendToUI(exceptionMessage);
-//
-//            } catch (Exception e) {
-//                appendToUI(e.getMessage());
-//            }
-//            return null;
-//        }
-//    }
+
     private boolean getConnectedBandClient() throws InterruptedException, BandException {
         if (client == null) {
             BandInfo[] devices = BandClientManager.getInstance().getPairedBands();
