@@ -3,6 +3,9 @@
     package="oldpeoplesavers.savetheoldpeople">
 
     <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.BLUETOOTH"/>
+    <uses-permission android:name="com.microsoft.band.service.access.BIND_BAND_SERVICE"/>
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
 
     <application android:name="oldpeoplesavers.savetheoldpeople.Application"
         android:allowBackup="true"
