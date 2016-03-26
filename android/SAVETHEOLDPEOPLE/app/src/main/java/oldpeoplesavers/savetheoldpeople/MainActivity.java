@@ -48,7 +48,6 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
     TextView heartRateView;
     TextView curAdd;
     Button btnStart;
-    Button btnConsent;
     Button updateLocation;
 
     Firebase mikelocRef;
@@ -82,7 +81,6 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
         heartRateView = (TextView) findViewById(R.id.sensorData);
 
         btnStart = (Button) findViewById(R.id.startButton);
-        btnConsent = (Button) findViewById(R.id.consentButton);
 
         updateLocation = (Button) findViewById(R.id.updateLocation);
 

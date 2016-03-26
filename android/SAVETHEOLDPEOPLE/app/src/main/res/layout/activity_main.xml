@@ -24,12 +24,6 @@
         android:text="Start"/>
 
     <Button
-        android:id="@+id/consentButton"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Heart Rate Consent"/>
-
-    <Button
         android:id="@+id/updateLocation"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
