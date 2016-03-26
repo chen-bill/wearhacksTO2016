@@ -9,6 +9,7 @@ var gulp = require('gulp'),
     less = require('gulp-less'),
     rename = require('gulp-rename'),
     minifyHTML = require('gulp-htmlmin');
+    ngmin = require('gulp-ngmin');
 
 var paths = {
     scripts: 'src/js/**/*.*',
@@ -57,6 +58,7 @@ gulp.task('custom-images', function() {
 gulp.task('custom-js', function() {
     return gulp.src(paths.scripts)
         //.pipe(minifyJs())
+        .pipe(ngmin({dynamic: true}))
         .pipe(concat('dashboard.min.js'))
         .pipe(gulp.dest('dist/js'));
 });
@@ -64,6 +66,7 @@ gulp.task('custom-js', function() {
 gulp.task('custom-less', function() {
     return gulp.src(paths.styles)
         .pipe(less())
+        .pipe(concat('dashboard.min.css'))
         .pipe(gulp.dest('dist/css'));
 });
 
