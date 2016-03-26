@@ -66,6 +66,7 @@ gulp.task('custom-js', function() {
 gulp.task('custom-less', function() {
     return gulp.src(paths.styles)
         .pipe(less())
+        .pipe(concat('dashboard.min.css'))
         .pipe(gulp.dest('dist/css'));
 });
 
