@@ -58,8 +58,8 @@ angular.module('RDash').controller('DashboardController', ['$scope', '$firebaseO
         };
 
         $scope.goToPerson = function(name) {
-            console.log('people/' + name);
-            $location.path(user.id + '/people/' + name);
+            console.log($scope.user.id + '/people/' + name);
+            $location.path($scope.user.id + '/people/' + name);
         };
 
         $scope.getMostRecentTime = function(object) {
