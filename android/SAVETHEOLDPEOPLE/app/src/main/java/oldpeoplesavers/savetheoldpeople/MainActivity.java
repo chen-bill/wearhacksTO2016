@@ -53,16 +53,17 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
         ActivityCompat.OnRequestPermissionsResultCallback{
 
     TextView nameView;
-    TextView heartRateView;
-    TextView curAdd;
     TextView rateView;
 
     Firebase andrewlocRef;
     Firebase andrewrateRef;
     Firebase andrewfell;
     Firebase andrewhelp;
+    Firebase memoref;
 
     MorphingButton btnMorph;
+
+    MorphingButton addBtn;
 
     private BandClient client = null;
 
@@ -90,13 +91,15 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
         andrewrateRef = new Firebase("https://watchdog-app.firebaseio.com/Bill/People/Andrew/heartRate");
         andrewfell = new Firebase("https://watchdog-app.firebaseio.com/Bill/People/Andrew/fellDown");
         andrewhelp = new Firebase("https://watchdog-app.firebaseio.com/Bill/People/Andrew/needsHelp");
+
         final WeakReference<Activity> reference = new WeakReference<Activity>(this);
 
         new HeartRateConsentTask().execute(reference);
 
         nameView = (TextView) findViewById(R.id.name);
-        heartRateView = (TextView) findViewById(R.id.sensorData);
         rateView = (TextView) findViewById(R.id.rate);
+
+        addBtn = (MorphingButton) findViewById(R.id.addBtn);
 
         // sample demonstrate how to morph button to green circle with icon
         btnMorph = (MorphingButton) findViewById(R.id.btnMorph);
@@ -110,9 +113,14 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
             }
         });
 
-        mLatitudeText = (TextView) findViewById(R.id.lat);
-        mLongitudeText = (TextView) findViewById(R.id.lon);
-        curAdd = (TextView) findViewById(R.id.address);
+        addBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                CustomDialogFragment addDialog = new CustomDialogFragment();
+                addDialog.show(getSupportFragmentManager(),"Create Dialog");
+            }
+        });
+
 
         if (mGoogleApiClient == null) {
             mGoogleApiClient = new GoogleApiClient.Builder(this)
@@ -176,7 +184,7 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
         }
     };
 
-    public long getCurrentTime(){
+    public static long getCurrentTime(){
         //Divide by 1000 to get seconds
         return System.currentTimeMillis() / 1000;
     }
@@ -192,14 +200,6 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
     }
 
 
-    private void appendToUI(final String string){
-        this.runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                heartRateView.setText(string);
-            }
-        });
-    }
 
     private void appendToRate(final String string){
         this.runOnUiThread(new Runnable(){
@@ -214,8 +214,6 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
         @Override
         public void onBandHeartRateChanged(final BandHeartRateEvent event) {
             if (event != null) {
-                appendToUI(String.format("Heart Rate = %d beats per minute\n"
-                        + "Quality = %s\n", event.getHeartRate(), event.getQuality()));
 
                 appendToRate(String.format("%d", event.getHeartRate()));
 
@@ -272,19 +270,12 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
                 mGoogleApiClient);
         if (mLastLocation != null) {
             Log.d("Log", "Location");
-            mLatitudeText.setText(String.valueOf(mLastLocation.getLatitude()));
-            mLongitudeText.setText(String.valueOf(mLastLocation.getLongitude()));
 
             Map<String, Object> locationRef = new HashMap<String, Object>();
             locationRef.put("lat", mLastLocation.getLatitude());
             locationRef.put("lng", mLastLocation.getLongitude());
 
             andrewlocRef.updateChildren(locationRef);
-            Geocoder geocoder = new Geocoder(this, Locale.getDefault());
-            Address address = geocoder.getFromLocation(mLastLocation.getLatitude(), mLastLocation.getLongitude(),1).get(0);
-
-            curAdd.setText("Current Address: " + address.getAddressLine(0));
-
         } else {
             Log.d("Log", "Location last null");
         }
@@ -335,7 +326,7 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
                         client.getSensorManager().registerAccelerometerEventListener(mAccelerometerEventListener, SampleRate.MS128);
 
                 } else {
-                    appendToUI("Band isn't connected. Please make sure bluetooth is on and the band is in range.\n");
+                  //  appendToUI("Band isn't connected. Please make sure bluetooth is on and the band is in range.\n");
                 }
             } catch (BandException e) {
                 String exceptionMessage="";
@@ -350,10 +341,10 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
                         exceptionMessage = "Unknown error occured: " + e.getMessage() + "\n";
                         break;
                 }
-                appendToUI(exceptionMessage);
+                e.printStackTrace();
 
             } catch (Exception e) {
-                appendToUI(e.getMessage());
+                e.printStackTrace();
             }
             return null;
         }
@@ -364,7 +355,7 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
         if (client == null) {
             BandInfo[] devices = BandClientManager.getInstance().getPairedBands();
             if (devices.length == 0) {
-                appendToUI("Band isn't paired with your phone.\n");
+               // appendToUI("Band isn't paired with your phone.\n");
                 return false;
             }
             client = BandClientManager.getInstance().create(getBaseContext(), devices[0]);
@@ -372,7 +363,7 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
             return true;
         }
 
-        appendToUI("Band is connecting...\n");
+       // appendToUI("Band is connecting...\n");
         return ConnectionState.CONNECTED == client.connect().await();
     }
 
@@ -390,7 +381,7 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
                         });
                     }
                 } else {
-                    appendToUI("Band isn't connected. Please make sure bluetooth is on and the band is in range.\n");
+                 //   appendToUI("Band isn't connected. Please make sure bluetooth is on and the band is in range.\n");
                 }
             } catch (BandException e) {
                 String exceptionMessage="";
@@ -405,10 +396,10 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
                         exceptionMessage = "Unknown error occured: " + e.getMessage() + "\n";
                         break;
                 }
-                appendToUI(exceptionMessage);
+               // appendToUI(exceptionMessage);
 
             } catch (Exception e) {
-                appendToUI(e.getMessage());
+              //  appendToUI(e.getMessage());
             }
             return null;
         }
