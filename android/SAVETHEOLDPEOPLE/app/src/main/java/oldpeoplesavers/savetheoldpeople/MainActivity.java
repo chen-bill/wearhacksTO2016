@@ -217,7 +217,7 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
                 appendToUI(String.format("Heart Rate = %d beats per minute\n"
                         + "Quality = %s\n", event.getHeartRate(), event.getQuality()));
 
-                appendToRate(String.format("Current Heart Rate: %d", event.getHeartRate()));
+                appendToRate(String.format("%d", event.getHeartRate()));
 
                 if (getCurrentTime() >= currentTimeStamp+5){
                     currentTimeStamp = getCurrentTime();
