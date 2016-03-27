@@ -1,21 +1,19 @@
-/**
- * Alerts Controller
- */
-
 angular.module('RDash')
 .controller('AlertsCtrl', ['$scope','$firebaseObject', function ($scope, $firebaseObject) {
-    var ref = new Firebase("https://watchdog-app.firebaseio.com/Bill");
+    var ref = new Firebase("https://watchdog-app.firebaseio.com/Bill/alerts");
     var refSync = $firebaseObject(ref);
-    $scope.alert = {};
+    $scope.alerts = {};
+    refSync.$bindTo($scope, "alerts");
 
-    refSync.$bindTo($scope, "alert");
+    $scope.debug = function(){
+        console.log($routeParams);
+    };
 
-    $scope.alerts = [{
-        type: 'danger',
-        msg: 'Old person fell down'
-    }];
+    $scope.getAlertString = function(index){
+        return $scope.alerts[index].name + " - " + $scope.alerts[index].description;
+    };
 
     $scope.closeAlert = function(index) {
-        $scope.alerts.splice(index, 1);
+        delete $scope.alerts[index];
     };
 }]);

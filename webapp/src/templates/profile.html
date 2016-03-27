@@ -1,0 +1,12 @@
+<div ng-controller="ProfilesCtrl">
+    <!--<button ng-click="debug()">button</button>-->
+    <div class="row">
+        <div class="col-sm-8">
+            <h3>Heart Rate</h3>
+            <canvas id="line" class="chart chart-line" chart-data="heartrateValues"
+              chart-labels="heartrateTimes"  chart-series="series" chart-options="heartrateOptions"
+              chart-click="onClick" style="">
+            </canvas> 
+        </div>
+    </div>
+</div>

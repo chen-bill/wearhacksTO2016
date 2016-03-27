@@ -12,13 +12,8 @@ angular.module('RDash').directive('sensorsUsed', function() {
         restrict: 'E',
         link: function(scope, element, attr){
             scope.debug = function(){
-                console.log('debuging');
                 console.log(scope.sensors);
             };
-            console.log('in directory');
-            if(scope.sensors){
-                console.log(scope.sensors);
-            }
             var template = '';
             var sensorHtml = {
                 'heartrate': '<i class="sensorIcon fa fa-heart"><i>',
@@ -28,9 +23,6 @@ angular.module('RDash').directive('sensorsUsed', function() {
                 template = template + sensorHtml[scope.sensors[i]];
             }
             directive.template = template;
-            if(template){
-                console.log(template);
-            }
         }
     };
     return directive;

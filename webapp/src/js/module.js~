@@ -1,1 +1,1 @@
-angular.module('RDash', ['ui.bootstrap', 'ui.router', 'ngCookies', 'firebase']);
+angular.module('RDash', ['ui.bootstrap', 'ui.router', 'ngCookies', 'firebase', 'chart.js']);
