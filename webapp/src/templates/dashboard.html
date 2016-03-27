@@ -1,11 +1,12 @@
-<div class="row alerts-container" data-ng-controller="AlertsCtrl" ng-hide="alerts.length">
+<div ng-controller="DashboardController">
+<div class="row alerts-container">
     <div class="col-xs-12" ng-repeat="alert in alerts">
-        <alert type="{{alert.type}}" ng-click="closeAlert($index)">{{getAlertString($index)}}</alert>
-        <span style="float: right; font-size: 20px; position: absolute; top: 5px; right: 25px; cursor: pointer">X</span>
+        <alert>{{alert}}</alert>
+        <!--<span style="float: right; font-size: 20px; position: absolute; top: 5px; right: 25px; cursor: pointer">X</span>-->
     </div>
 </div>
 
-<div class="row" ng-controller="DashboardController">
+<div class="row">
     <div style="position: fixed; top: 50%; left: 50%" ng-show="loading">
         <img src="../img/loading.gif"/>
     </div>
@@ -55,7 +56,7 @@
     </div>
 </div>
 
-<div class="row" ng-controller="DashboardController">
+<div class="row">
     <!--<button ng-click="debug()">debug</button>-->
     <div class="row">
         <div class="col-sm-4" layout="column" ng-repeat="(name, data) in user.People" ng-click="goToPerson(name)">
@@ -75,4 +76,5 @@
             </div>
         </div>
     </div>
+</div>
 </div>

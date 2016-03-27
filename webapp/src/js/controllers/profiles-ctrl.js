@@ -13,8 +13,6 @@ angular.module('RDash')
             $scope.profile = {};
             refSync.$loaded().then(function() {
                 refSync.$bindTo($scope, "profile");
-                //console.log(refSync.$value);
-                //generateHeartrateData(refSync.$value);
             });
 
             $scope.getStyle = function(status) {
@@ -119,7 +117,44 @@ angular.module('RDash')
                 }
             };
 
-//----------------------------------------------------------events
+            //----------------------------------------------------------events
+
+            var ref = new Firebase("https://watchdog-app.firebaseio.com/Bill");
+            var refSyncUser = $firebaseObject(ref);
+            $scope.user = {};
+            refSyncUser.$loaded().then(function() {
+                refSyncUser.$bindTo($scope, "user");
+            });
+
+            $scope.$watch('user.People', function(newVal, oldVal) {
+                console.log('watching');
+                for (var person in newVal) {
+                    var keys = Object.keys(newVal[person].heartRate);
+                    console.log(newVal[person].heartRate[keys[keys.length - 1]]);
+                    console.log(newVal[person].settings.hearthreateHighThreshold);
+                    if (newVal[person].heartRate[keys[keys.length - 1]] >= newVal[person].settings.heartrateHighThreshold ||
+                        (newVal[person].heartRate[keys[keys.length - 1]] <= newVal[person].settings.heartrateLowThreshold && newVal[person].heartRate[keys[keys.length - 1]] > 1)) {
+                        console.log('heartbeat threshold ' + person);
+                        $scope.user.People[person].status = 2;
+                    }
+
+                    //generates alerts
+                    for (var alert in newVal[person].alerts){
+                        console.log(newVal[person].alerts[alert]);
+                    }
+                }
+            }, true);
+
+            $scope.getMemoTimestamp = function(timestamp) {
+                var date = new Date(timestamp);
+                var day = date.getDate();
+                var monthIndex = date.getMonth();
+                var year = date.getFullYear();
+                var hours = date.getHours();
+                var minutes = date.getMinutes();
+                var seconds = date.getSeconds();
+                return ('' + day + '/' + (monthIndex+1).toString() + ' - ' + hours + ':' + minutes + ':' + seconds );
+            };
 
             $scope.events = [{
                 badgeClass: 'info',
@@ -134,5 +169,11 @@ angular.module('RDash')
                 content: 'More awesome content.'
 
             }];
+
+            //================================ alerts
+
+            $scope.closeAlert = function(index) {
+                delete $scope.user.alerts[index];
+            };
         }
     ]);
