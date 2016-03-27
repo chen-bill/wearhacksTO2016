@@ -16,8 +16,8 @@
             <div>
                 <h3>Notification</h3>
                 <p>Click to resolve</p>
-                <div style="width: 95%; margin: 2.5%; padding: 10px" ng-style="getStyle(profile.status)" ng-repeat="alert in profile.alerts">
-                    <b>{{alert}}</b>
+                <div style="width: 95%; margin: 2.5%; padding: 10px" ng-style="getStyle(profile.status)" ng-repeat="(key, value) in profile.alerts" ng-click="deleteAlert(key)">
+                    <b>{{value}}</b>
                 </div>
             </div>
         </div>
@@ -36,22 +36,19 @@
             </div>
         </div>
         <div class="row dataMetric">
-            <div class="col-sm-4">
-                value
-            </div>
-            <div class="col-sm-8" style="max-height: 600px">
+            <div class="col-sm-12" style="max-height: 400px; overflow: auto">
                 <h3>Memos</h3>
                 <div>
                     <timeline>
                         <timeline-event ng-repeat="memo in profile.memos" side="right">
-                            <timeline-badge class="{{memo.badgeClass}}">
+                            <timeline-badge class="info" style="left: 10%">
                                 <i class="glyphicon {{memo.badgeIconClass}}"></i>
                             </timeline-badge>
-                            <timeline-panel class="{{memo.badgeClass}}">
+                            <timeline-panel class="info" style="width:80%">
                                 <timeline-heading>
                                     <h4>{{memo.title}}</h4>
                                 </timeline-heading>
-                                <p>{{getMemoTimestamp(memo.timestamp)}}</p>
+                                <small>{{getMemoTimestamp(memo.timeStamp)}}</small>
                                 <p>{{memo.content}}</p>
                             </timeline-panel>
                         </timeline-event>

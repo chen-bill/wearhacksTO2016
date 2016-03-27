@@ -127,7 +127,6 @@ angular.module('RDash')
             });
 
             $scope.$watch('user.People', function(newVal, oldVal) {
-                console.log('watching');
                 for (var person in newVal) {
                     var keys = Object.keys(newVal[person].heartRate);
                     console.log(newVal[person].heartRate[keys[keys.length - 1]]);
@@ -136,11 +135,6 @@ angular.module('RDash')
                         (newVal[person].heartRate[keys[keys.length - 1]] <= newVal[person].settings.heartrateLowThreshold && newVal[person].heartRate[keys[keys.length - 1]] > 1)) {
                         console.log('heartbeat threshold ' + person);
                         $scope.user.People[person].status = 2;
-                    }
-
-                    //generates alerts
-                    for (var alert in newVal[person].alerts){
-                        console.log(newVal[person].alerts[alert]);
                     }
                 }
             }, true);
@@ -153,7 +147,7 @@ angular.module('RDash')
                 var hours = date.getHours();
                 var minutes = date.getMinutes();
                 var seconds = date.getSeconds();
-                return ('' + day + '/' + (monthIndex+1).toString() + ' - ' + hours + ':' + minutes + ':' + seconds );
+                return ('' + day + '/' + (monthIndex + 1).toString() + ' - ' + hours + ':' + minutes + ':' + seconds);
             };
 
             $scope.events = [{
@@ -167,13 +161,33 @@ angular.module('RDash')
                 badgeIconClass: 'glyphicon-credit-card',
                 title: 'Second heading',
                 content: 'More awesome content.'
-
             }];
 
             //================================ alerts
 
-            $scope.closeAlert = function(index) {
-                delete $scope.user.alerts[index];
+            $scope.deleteAlert = function(index) {
+                console.log(index);
+                console.log($scope.profile.alerts[index]);
+                console.log($scope.profile.alerts);
+                console.log(Object.keys($scope.profile.alerts));
+                if (index == 'helpRequest'){
+                    console.log('settings needs help to false');
+                    $scope.profile.needsHelp = false;
+                }
+                if (index == 'fellDown'){
+                    $scope.profile.fellDown = false;
+                }
+
+                delete $scope.profile.alerts[index];
+                if (Object.keys($scope.profile.alerts).length === 0) {
+                    $scope.profile.status = 0;
+                } else if (Object.keys($scope.profile.alerts).indexOf('heartAlert') !== -1) {
+                    $scope.profile.status = 2;
+                } else if (Object.keys($scope.profile.alerts).indexOf('fellDown') !== -1) {
+                    $scope.profile.status = 2;
+                } else if (Object.keys($scope.profile.alerts).indexOf('helpRequest') !== -1) {
+                    $scope.profile.status = 1;
+                }
             };
         }
     ]);

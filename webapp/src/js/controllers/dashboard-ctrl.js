@@ -75,15 +75,44 @@ angular.module('RDash').controller('DashboardController', ['$scope', '$firebaseO
             var newAlertsArray = [];
             for(var person in newVal) {
                 var keys = Object.keys(newVal[person].heartRate);
+                //console.log(newVal[person].heartRate[keys[keys.length-1]]);
+                //console.log(newVal[person].settings.heartrateHighThreshold);
+                //console.log(newVal[person].heartRate[keys[keys.length-1]] >= newVal[person].settings.heartrateHighThreshold);
+                //console.log(newVal[person].heartRate[keys[keys.length-1]] <= newVal[person].settings.heartrateLowThreshold && newVal[person].heartRate[keys[keys.length-1]] > 1);
                 if(newVal[person].heartRate[keys[keys.length-1]] >= newVal[person].settings.heartrateHighThreshold || 
                    (newVal[person].heartRate[keys[keys.length-1]] <= newVal[person].settings.heartrateLowThreshold && newVal[person].heartRate[keys[keys.length-1]] > 1)){
-                    console.log('heartbeat threshold ' + person);
+                    console.log('heart rate threshold ' + person);
                     $scope.user.People[person].status = 2;
+                    if($scope.user.People[person].alerts){
+                        $scope.user.People[person].alerts.heartAlert = person + ' - Heartrate threshold met';
+                    } else {
+                        $scope.user.People[person].alerts = {};
+                        $scope.user.People[person].alerts.heartAlert = person + ' - Heartrate threshold met';
+                    }
+                }
+                //display alerts
+                
+                if(!$scope.user.People[person].alerts){
+                    $scope.user.People[person].alerts = {};
                 }
 
                 for (var alert in newVal[person].alerts){
                     console.log(newVal[person].alerts[alert]);
                     newAlertsArray.push(newVal[person].alerts[alert]);
+                }
+
+                if(newVal[person].fellDown === true){
+                    $scope.user.People[person].status = 2;
+                    $scope.user.People[person].alerts.fellDown = person + ' - Fell down';
+                }
+
+                if(newVal[person].needsHelp === true){
+                    $scope.user.People[person].status = 1;
+                    $scope.user.People[person].alerts.helpRequest = person + ' - Request for help';
+                }
+                
+                if(!newVal[person].alerts){
+                    $scope.user.People[person].status = 0;
                 }
             }
             $scope.alerts = newAlertsArray;
