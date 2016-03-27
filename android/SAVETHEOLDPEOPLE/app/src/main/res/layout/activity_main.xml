@@ -8,6 +8,7 @@
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
     android:orientation="vertical"
+    android:background="#FFFFFF"
     tools:context="oldpeoplesavers.savetheoldpeople.MainActivity">
 
     <TextView
@@ -17,16 +18,31 @@
         android:text="Hello Andrew"
         android:textSize="40sp"
         android:textColor="#4C4C4C"/>
-        s
-    <TextView
-        android:id="@+id/rate"
-        android:layout_marginTop="10dp"
+
+
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Current Heart Rate: N/A"
-        android:textSize="20sp"
-        android:textColor="#4C4C4C"
-        android:layout_marginBottom="10dp"/>
+        android:layout_height="50dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginBottom="10dp"
+        android:orientation="horizontal">
+        <pl.droidsonroids.gif.GifImageView
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:src="@drawable/heartbeat" />
+
+        <TextView
+            android:id="@+id/rate"
+            android:layout_marginTop="10dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Current Heart Rate: N/A"
+            android:textSize="20sp"
+            android:textColor="#4C4C4C"
+            android:layout_marginBottom="10dp"
+            android:layout_marginLeft="5dp"/>
+
+    </LinearLayout>
 
     <com.dd.morphingbutton.MorphingButton
         android:id="@+id/btnMorph"
@@ -37,29 +53,5 @@
         android:background="#990000"
         android:textSize="16sp"
         android:text="Request Help"/>
-
-    <TextView
-        android:id="@+id/sensorData"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text=""/>
-
-    <TextView
-        android:id="@+id/lat"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
-
-    <TextView
-        android:id="@+id/lon"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
-
-    <TextView
-        android:id="@+id/address"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:textSize = "20sp"
-        android:textColor="#4C4C4C"
-        android:text="Current Address: "/>
     
 </LinearLayout>
