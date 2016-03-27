@@ -67,8 +67,7 @@
                 </div>
                 <img class="profilePic" ng-src="{{data.profilePic}}"/>
                 <div class="cardBody">
-                    this is the body text<br>
-                    something something body text
+                    Monitoring...
                 </div>
                 <!--<div class="cardFooter">-->
                     <!--<a href="#/profiles/{{name}}/{{data.id}}" class="link-button">More Info</a>-->
@@ -78,7 +77,7 @@
         <!--empty-->
         <div class="col-sm-4" layout="column">
             <div class="profileCard">
-                <div style="text-align: center; font-size: 100px; height: 200px; padding-top: 32px">
+                <div style="text-align: center; font-size: 100px; height: 200px; padding-top: 32px; background-color: grey; color: white">
                     +
                 </div>
             </div>

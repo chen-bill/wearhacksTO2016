@@ -8,7 +8,9 @@ angular.module('RDash')
             var seconds;
             var datapoints = 50;
             var firstRun = true;
+            console.log("https://watchdog-app.firebaseio.com/Bill/People/" + $stateParams.name);
             var profile = new Firebase("https://watchdog-app.firebaseio.com/Bill/People/" + $stateParams.name);
+            console.log(profile);
             var refSync = $firebaseObject(profile);
             $scope.profile = {};
             refSync.$loaded().then(function() {
@@ -35,12 +37,8 @@ angular.module('RDash')
                 }
             };
 
-            $scope.debug = function() {
-                console.log($stateParams);
-                console.log($scope.profile);
-            };
-
             $scope.$watch('profile.heartRate', function(newVal, oldVal) {
+                console.log(newVal);
                 if (newVal !== oldVal) {
                     if (firstRun) {
                         generateHeartrateData($scope.profile.heartRate);
@@ -126,18 +124,45 @@ angular.module('RDash')
                 refSyncUser.$bindTo($scope, "user");
             });
 
-            $scope.$watch('user.People', function(newVal, oldVal) {
-                for (var person in newVal) {
-                    var keys = Object.keys(newVal[person].heartRate);
-                    console.log(newVal[person].heartRate[keys[keys.length - 1]]);
-                    console.log(newVal[person].settings.hearthreateHighThreshold);
-                    if (newVal[person].heartRate[keys[keys.length - 1]] >= newVal[person].settings.heartrateHighThreshold ||
-                        (newVal[person].heartRate[keys[keys.length - 1]] <= newVal[person].settings.heartrateLowThreshold && newVal[person].heartRate[keys[keys.length - 1]] > 1)) {
-                        console.log('heartbeat threshold ' + person);
-                        $scope.user.People[person].status = 2;
+        $scope.$watch('user.People', function(newVal, oldVal) {
+            for(var person in newVal) {
+                var keys = Object.keys(newVal[person].heartRate);
+                console.log(newVal[person].heartRate[keys[keys.length-1]]);
+                console.log(newVal[person].settings.hearthreateHighThreshold);
+                console.log(newVal[person].heartRate[keys[keys.length-1]] >= newVal[person].settings.hearthreateHighThreshold);
+                console.log(newVal[person].heartRate[keys[keys.length-1]] <= newVal[person].settings.heartrateLowThreshold && newVal[person].heartRate[keys[keys.length-1]] > 1);
+                if(newVal[person].heartRate[keys[keys.length-1]] >= newVal[person].settings.hearthreateHighThreshold || 
+                   (newVal[person].heartRate[keys[keys.length-1]] <= newVal[person].settings.heartrateLowThreshold && newVal[person].heartRate[keys[keys.length-1]] > 1)){
+                    console.log('heart rate threshold ' + person);
+                    $scope.user.People[person].status = 2;
+                    if($scope.user.People[person].alerts){
+                        $scope.user.People[person].alerts.heartAlert = person + ' - Heartrate threshold met';
+                    } else {
+                        $scope.user.People[person].alerts = {};
+                        $scope.user.People[person].alerts.heartAlert = person + ' - Heartrate threshold met';
                     }
                 }
-            }, true);
+                //display alerts
+                
+                if(!$scope.user.People[person].alerts){
+                    $scope.user.People[person].alerts = {};
+                }
+
+                if(newVal[person].fellDown === true){
+                    $scope.user.People[person].status = 2;
+                    $scope.user.People[person].alerts.fellDown = person + ' - Fell down';
+                }
+
+                if(newVal[person].needsHelp === true){
+                    $scope.user.People[person].status = 1;
+                    $scope.user.People[person].alerts.helpRequest = person + ' - Request for help';
+                }
+                
+                if(!newVal[person].alerts){
+                    $scope.user.People[person].status = 0;
+                }
+            }
+        }, true);
 
             $scope.getMemoTimestamp = function(timestamp) {
                 var date = new Date(timestamp);

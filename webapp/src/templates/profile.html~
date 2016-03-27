@@ -14,7 +14,7 @@
                 <p>Email: {{profile.contactInformation.email}}</p>
             </div>
             <div>
-                <h3>Notification</h3>
+                <h3>Notifications</h3>
                 <p>Click to resolve</p>
                 <div style="width: 95%; margin: 2.5%; padding: 10px" ng-style="getStyle(profile.status)" ng-repeat="(key, value) in profile.alerts" ng-click="deleteAlert(key)">
                     <b>{{value}}</b>
@@ -32,7 +32,10 @@
                 </canvas> 
             </div>
             <div class="col-sm-4" style="margin-top:55px;">
-                <button>Button</button>
+                <label>Max heartrate:</label><br>
+                <input type="number" value="{{profile.settings.heartrateHighThreshold}}" ng-model="profile.settings.heartrateHighThreshold"><br>
+                <label>Min heartrate:</label><br>
+                <input type="number" value="{{profile.settings.heartrateLowThreshold}}" ng-model="profile.settings.heartrateLowThreshold"><br>
             </div>
         </div>
         <div class="row dataMetric">
@@ -41,7 +44,7 @@
                 <div>
                     <timeline>
                         <timeline-event ng-repeat="memo in profile.memos" side="right">
-                            <timeline-badge class="info">
+                            <timeline-badge class="info" style="left: 10%">
                                 <i class="glyphicon {{memo.badgeIconClass}}"></i>
                             </timeline-badge>
                             <timeline-panel class="info" style="width:80%">
