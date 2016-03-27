@@ -1,38 +1,58 @@
 <div ng-controller="ProfilesCtrl">
     <!--<button ng-click="debug()">button</button>-->
-    <div class="row">
-	<div class="col-sm-8">
-	    <h3>Heart Rate</h3>
-	    <canvas id="line" class="chart chart-line" chart-data="heartrateValues"
-		chart-labels="heartrateTimes"  chart-series="series" chart-options="heartrateOptions"
-		chart-click="onClick" style="">
-	    </canvas> 
-	</div>
-	<div class="col-sm-4">
-	    <h3>Settings</h3>
+    <div class="contact-panel" style="margin-top: 10px; width: 30%; height: calc(100vh - 60px); right: 0; top: 60px; border-left: 1px #e9e9e9 solid;">
+        <div style="background-color: blue; width: 100%; height: 30vh; text-align: center" ng-style="getStyle(profile.status)">
+            <h3 style="margin: 0; padding-top: 15px; padding-bottom: 10px"> {{profile.contactInformation.fullName}}</h3>
+            <img ng-src="{{profile.profilePic}}" style="width: 60%; border-radius: 50%"/>
+        </div>
+        <div style="padding: 10px">
+            <div>
+                <h3>Contact</h3>
+                <p>Mobile: {{profile.contactInformation.cellPhone}}</p>
+                <p>Home: {{profile.contactInformation.homePhone}}</p>
+                <p>Address: {{profile.contactInformation.address}}</p>
+                <p>Email: {{profile.contactInformation.email}}</p>
+            </div>
+            <div>
+                <h3>Notification</h3>
+            </div>
         </div>
     </div>
-    <div class="row">
-        <div class="col-sm-4">
-            value
-        </div>
-	<div class="col-sm-8">
-	    <h3>Memos</h3>
-            <div>
-                <timeline>
-                    <timeline-event ng-repeat="event in events" side="right">
-                        <timeline-badge class="{{event.badgeClass}}">
-                            <i class="glyphicon {{event.badgeIconClass}}"></i>
-                        </timeline-badge>
-                        <timeline-panel class="{{event.badgeClass}}">
-                            <timeline-heading>
-                                <h4>{{event.title}}</h4>
-                            </timeline-heading>
-                            <p>{{event.content}}</p>
-                        </timeline-panel>
-                    </timeline-event>
-                </timeline>
+    <div class="data-panel" style="width: 70%; height: 100%; float:left">
+        <div class="row dataMetric">
+            <div class="col-sm-8">
+                <h3>Heart Rate</h3>
+                <canvas id="line" class="chart chart-line" chart-data="heartrateValues"
+                    chart-labels="heartrateTimes"  chart-series="series" chart-options="heartrateOptions"
+                    chart-click="onClick" style="">
+                </canvas> 
             </div>
-	</div>
+            <div class="col-sm-4" style="margin-top:55px;">
+                <button>Button</button>
+            </div>
+        </div>
+        <div class="row dataMetric">
+            <div class="col-sm-4">
+                value
+            </div>
+            <div class="col-sm-8" style="max-height: 600px">
+                <h3>Memos</h3>
+                <div>
+                    <timeline>
+                        <timeline-event ng-repeat="event in events" side="right">
+                            <timeline-badge class="{{event.badgeClass}}">
+                                <i class="glyphicon {{event.badgeIconClass}}"></i>
+                            </timeline-badge>
+                            <timeline-panel class="{{event.badgeClass}}">
+                                <timeline-heading>
+                                    <h4>{{event.title}}</h4>
+                                </timeline-heading>
+                                <p>{{event.content}}</p>
+                            </timeline-panel>
+                        </timeline-event>
+                    </timeline>
+                </div>
+            </div>
+        </div>
     </div>
 </div>

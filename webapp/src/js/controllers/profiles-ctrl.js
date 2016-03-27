@@ -17,6 +17,26 @@ angular.module('RDash')
                 //generateHeartrateData(refSync.$value);
             });
 
+            $scope.getStyle = function(status) {
+                if (status === 0) {
+                    return {
+                        "background-color": "#4CAF50"
+                    };
+                } else if (status == 1) {
+                    return {
+                        "background-color": "#FFA726"
+                    };
+                } else if (status == 2) {
+                    return {
+                        "background-color": "#F44336"
+                    };
+                } else {
+                    return {
+                        "background-color": "white"
+                    };
+                }
+            };
+
             $scope.debug = function() {
                 console.log($stateParams);
                 console.log($scope.profile);
@@ -94,6 +114,8 @@ angular.module('RDash')
                     } else {
                         $scope.heartrateValues[0].push($scope.profile.heartRate[timestampKeys[i]]);
                     }
+                    console.log($scope.heartrateValues[0]);
+                    console.log($scope.heartrateTimes);
                 }
             };
 

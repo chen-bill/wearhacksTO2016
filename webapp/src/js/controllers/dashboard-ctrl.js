@@ -70,8 +70,15 @@ angular.module('RDash').controller('DashboardController', ['$scope', '$firebaseO
             return (object[maxValue]);
         };
 
-        $scope.$watch('user', function(newVal, oldVal) {
+        //heartrate watch
+        $scope.$watch('user.People', function(newVal, oldVal) {
             console.log(newVal);
+            for(var person in newVal) {
+                var keys = Object.keys(newVal[person]);
+                if(keys[keys.length-1] >= newVal[person].settings.hearrateHighThreshold){
+                    //newVal[person].status
+                }
+            }
         }, true);
     }
 ]);
