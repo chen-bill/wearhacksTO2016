@@ -1,0 +1,11 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context="com.microsoft.sdk.bandstreamingapp.MainActivity" >
+
+    <item
+        android:id="@+id/action_settings"
+        android:orderInCategory="100"
+        android:title="@string/action_settings"/>
+
+</menu>
+<!-- From: file:/home/alda/Development/WearHacks2016/wearhacksTO2016/android/Microsoft%20Band%20Examples/BandHeartRateApp/res/menu/main.xml -->

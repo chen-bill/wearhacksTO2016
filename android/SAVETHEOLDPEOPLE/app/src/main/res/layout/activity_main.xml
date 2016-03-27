@@ -11,15 +11,31 @@
     tools:context="oldpeoplesavers.savetheoldpeople.MainActivity">
 
     <TextView
-        android:id="@+id/data"
+        android:id="@+id/name"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Hello World!" />
-    
-    <Button
-        android:id="@+id/requestHelp"
+        android:text="Hello Andrew"
+        android:textSize="40sp"
+        android:textColor="#4C4C4C"/>
+        s
+    <TextView
+        android:id="@+id/rate"
+        android:layout_marginTop="10dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:text="Current Heart Rate: N/A"
+        android:textSize="20sp"
+        android:textColor="#4C4C4C"
+        android:layout_marginBottom="10dp"/>
+
+    <com.dd.morphingbutton.MorphingButton
+        android:id="@+id/btnMorph"
+        android:layout_width="670px"
+        android:layout_height="150px"
+        android:layout_gravity="center"
+        android:textColor="#FFFFFF"
+        android:background="#990000"
+        android:textSize="16sp"
         android:text="Request Help"/>
 
     <TextView
@@ -42,6 +58,8 @@
         android:id="@+id/address"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:textSize = "20sp"
+        android:textColor="#4C4C4C"
         android:text="Current Address: "/>
-
+    
 </LinearLayout>

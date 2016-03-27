@@ -1,0 +1,2 @@
+<?xml version="1.0" encoding="utf-8"?>
+<merger version="3"><dataSet config="main"><source path="/home/alda/Development/WearHacks2016/wearhacksTO2016/android/Microsoft Band Examples/BandAccelerometerApp/assets"/></dataSet><dataSet config="debug"><source path="/home/alda/Development/WearHacks2016/wearhacksTO2016/android/Microsoft Band Examples/BandAccelerometerApp/build-types/debug/assets"/></dataSet></merger>
