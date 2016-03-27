@@ -72,10 +72,24 @@ angular.module('RDash').controller('DashboardController', ['$scope', '$firebaseO
 
         //heartrate watch
         $scope.$watch('user.People', function(newVal, oldVal) {
-            console.log(newVal);
+            var newAlertsArray = [];
             for(var person in newVal) {
-                var keys = Object.keys(newVal[person]);
+                var keys = Object.keys(newVal[person].heartRate);
+                if(newVal[person].heartRate[keys[keys.length-1]] >= newVal[person].settings.heartrateHighThreshold || 
+                   (newVal[person].heartRate[keys[keys.length-1]] <= newVal[person].settings.heartrateLowThreshold && newVal[person].heartRate[keys[keys.length-1]] > 1)){
+                    console.log('heartbeat threshold ' + person);
+                    $scope.user.People[person].status = 2;
+                }
+
+                for (var alert in newVal[person].alerts){
+                    console.log(newVal[person].alerts[alert]);
+                    newAlertsArray.push(newVal[person].alerts[alert]);
+                }
             }
+            $scope.alerts = newAlertsArray;
+            console.log($scope.alerts);
         }, true);
+
+        $scope.alerts = ['this is an alert'];
     }
 ]);
