@@ -1,6 +1,7 @@
 package oldpeoplesavers.savetheoldpeople;
 
 import android.Manifest;
+import android.app.Activity;
 import android.content.DialogInterface;
 import android.content.pm.PackageManager;
 import android.location.Address;
@@ -17,6 +18,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
+import com.dd.morphingbutton.MorphingButton;
 import com.firebase.client.DataSnapshot;
 import com.firebase.client.Firebase;
 import com.firebase.client.FirebaseError;
@@ -35,10 +37,12 @@ import com.microsoft.band.sensors.BandAccelerometerEvent;
 import com.microsoft.band.sensors.BandAccelerometerEventListener;
 import com.microsoft.band.sensors.BandHeartRateEvent;
 import com.microsoft.band.sensors.BandHeartRateEventListener;
+import com.microsoft.band.sensors.HeartRateConsentListener;
 import com.microsoft.band.sensors.HeartRateQuality;
 import com.microsoft.band.sensors.SampleRate;
 
 import java.io.IOException;
+import java.lang.ref.WeakReference;
 import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
@@ -83,12 +87,33 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
         andrewrateRef = new Firebase("https://watchdog-app.firebaseio.com/Bill/People/Andrew/heartRate");
         andrewfell = new Firebase("https://watchdog-app.firebaseio.com/Bill/People/Andrew/fellDown");
         andrewhelp = new Firebase("https://watchdog-app.firebaseio.com/Bill/People/Andrew/needsHelp");
+        final WeakReference<Activity> reference = new WeakReference<Activity>(this);
 
+        new HeartRateConsentTask().execute(reference);
 
         dataView = (TextView) findViewById(R.id.data);
         heartRateView = (TextView) findViewById(R.id.sensorData);
 
         helpMe = (Button) findViewById(R.id.requestHelp);
+        // sample demonstrate how to morph button to green circle with icon
+        final MorphingButton btnMorph = (MorphingButton) findViewById(R.id.btnMorph);
+
+        btnMorph.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                MorphingButton.Params circle = MorphingButton.Params.create()
+                        .duration(500)
+                        .cornerRadius(256) // 56 dp// 56 dp
+                        .width(256)
+                        .height(256)
+                        .color(R.color.morphColour) // normal state color
+                        .colorPressed(R.color.morphPressed) // pressed state color
+                        .icon(R.drawable.ic_done_white_48dp); // icon
+                btnMorph.morph(circle);
+
+            }
+
+        });
 
         mLatitudeText = (TextView) findViewById(R.id.lat);
         mLongitudeText = (TextView) findViewById(R.id.lon);
@@ -331,5 +356,43 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
 
         appendToUI("Band is connecting...\n");
         return ConnectionState.CONNECTED == client.connect().await();
+    }
+
+    private class HeartRateConsentTask extends AsyncTask<WeakReference<Activity>, Void, Void> {
+        @Override
+        protected Void doInBackground(WeakReference<Activity>... params) {
+            try {
+                if (getConnectedBandClient()) {
+
+                    if (params[0].get() != null) {
+                        client.getSensorManager().requestHeartRateConsent(params[0].get(), new HeartRateConsentListener() {
+                            @Override
+                            public void userAccepted(boolean consentGiven) {
+                            }
+                        });
+                    }
+                } else {
+                    appendToUI("Band isn't connected. Please make sure bluetooth is on and the band is in range.\n");
+                }
+            } catch (BandException e) {
+                String exceptionMessage="";
+                switch (e.getErrorType()) {
+                    case UNSUPPORTED_SDK_VERSION_ERROR:
+                        exceptionMessage = "Microsoft Health BandService doesn't support your SDK Version. Please update to latest SDK.\n";
+                        break;
+                    case SERVICE_ERROR:
+                        exceptionMessage = "Microsoft Health BandService is not available. Please make sure Microsoft Health is installed and that you have the correct permissions.\n";
+                        break;
+                    default:
+                        exceptionMessage = "Unknown error occured: " + e.getMessage() + "\n";
+                        break;
+                }
+                appendToUI(exceptionMessage);
+
+            } catch (Exception e) {
+                appendToUI(e.getMessage());
+            }
+            return null;
+        }
     }
 }

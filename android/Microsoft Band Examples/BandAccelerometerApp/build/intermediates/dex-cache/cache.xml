@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<items version="2" >
+
+    <item
+        jar="/home/alda/Development/WearHacks2016/wearhacksTO2016/android/Microsoft Band Examples/BandAccelerometerApp/libs/microsoft-band-1.3.20307.2.jar"
+        jumboMode="false"
+        revision="23.0.1"
+        sha1="f14888994429a404549c37653bc6e4c6a8c39a8e">
+        <dex dex="/home/alda/Development/WearHacks2016/wearhacksTO2016/android/Microsoft Band Examples/BandAccelerometerApp/build/intermediates/pre-dexed/debug/microsoft-band-1.3.20307.2-2ea05965fd8f7c4a930c319599e400f37fdb9ff1.jar" />
+    </item>
+
+</items>
