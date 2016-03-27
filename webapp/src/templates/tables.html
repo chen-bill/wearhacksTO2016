@@ -1,8 +1,23 @@
-<div class="row">
-  <div class="col-lg-6">
-      This is a table
-  </div>
-  <div class="col-lg-6">
-      another table
-  </div>
+<div ng-controller="MapController">
+    <div id="map"></div>
+<!--     <div id="class" ng-repeat="marker in markers | orderBy : 'title'">
+         <a href="#" ng-click="openInfoWindow($event, marker)">{{marker.title}}</a>
+    </div> -->
+
+	<div class="row" style="padding-top: 20px">
+        <div class="col-sm-4" layout="column" ng-repeat="marker in markers | orderBy : 'title'" ng-click="openInfoWindow($event, marker)">
+            <div class="profileCard">
+                <div class="cardTitle" ng-style="{{styles[marker.title]}}">
+                    <h3 class="headline">{{marker.title}}</h3>
+                </div>
+                <img class="profilePic" ng-src="{{profilePics[marker.title]}}"/>
+                <div class="cardBody">
+					{{geoLocations[marker.title]}}
+                </div>
+                <!--<div class="cardFooter">-->
+                    <!--<a href="#/profiles/{{name}}/{{data.id}}" class="link-button">More Info</a>-->
+                <!--</div>-->
+            </div>
+        </div>
+    </div>
 </div>
