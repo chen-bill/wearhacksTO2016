@@ -50,8 +50,19 @@
         android:layout_height="150px"
         android:layout_gravity="center"
         android:textColor="#FFFFFF"
-        android:background="#990000"
+        android:background="#F44336"
         android:textSize="16sp"
         android:text="Request Help"/>
-    
+
+    <com.dd.morphingbutton.MorphingButton
+        android:id="@+id/addBtn"
+        android:layout_width="670px"
+        android:layout_height="150px"
+        android:background="#F44336"
+        android:text="Add Memo"
+        android:layout_gravity = "center"
+        android:textColor = "#FFFFFF"
+        android:textSize="16sp"
+        android:layout_marginTop="10dp"/>
+
 </LinearLayout>
