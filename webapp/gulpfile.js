@@ -12,7 +12,7 @@ var gulp = require('gulp'),
     ngmin = require('gulp-ngmin');
 
 var paths = {
-    scripts: 'src/js/**/*.*',
+    scripts: 'src/js/**/*.js',
     styles: 'src/less/**/*.*',
     images: 'src/img/**/*.*',
     templates: 'src/templates/**/*.html',
@@ -57,8 +57,8 @@ gulp.task('custom-images', function() {
 
 gulp.task('custom-js', function() {
     return gulp.src(paths.scripts)
-        .pipe(minifyJs())
-        .pipe(ngmin({dynamic: true}))
+        //.pipe(minifyJs())
+        //.pipe(ngmin({dynamic: true}))
         .pipe(concat('dashboard.min.js'))
         .pipe(gulp.dest('dist/js'));
 });

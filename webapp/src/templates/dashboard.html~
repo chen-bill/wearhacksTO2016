@@ -1,11 +1,12 @@
-<div class="row alerts-container" data-ng-controller="AlertsCtrl" data-ng-show="alerts.length">
-    <div class="col-xs-12">
-        <alert data-ng-repeat="alert in alerts" type="{{alert.type}}" ng-click="closeAlert($index)">{{alert.msg}}</alert>
+<div class="row alerts-container" data-ng-controller="AlertsCtrl" ng-hide="alerts.length">
+    <div class="col-xs-12" ng-repeat="alert in alerts">
+        <alert type="{{alert.type}}" ng-click="closeAlert($index)">{{getAlertString($index)}}</alert>
+        <span style="float: right; font-size: 20px; position: absolute; top: 5px; right: 25px; cursor: pointer">X</span>
     </div>
 </div>
 
 <div class="row" ng-controller="DashboardController">
-    <div class="col-lg-3 col-md-6 col-xs-12" ng-click="debug()">
+    <div class="col-lg-4 col-md-6 col-xs-12" ng-click="debug()">
         <rd-widget>
             <rd-widget-body>
                 <div class="widget-icon pull-left">
@@ -16,7 +17,7 @@
             </rd-widget-body>
         </rd-widget>
     </div>
-    <div class="col-lg-3 col-md-6 col-xs-12">
+    <div class="col-lg-4 col-md-6 col-xs-12">
         <rd-widget>
             <rd-widget-body>
                 <div class="widget-icon red pull-left">
@@ -27,7 +28,7 @@
             </rd-widget-body>
         </rd-widget>
     </div>
-    <div class="col-lg-3 col-md-6 col-xs-12">
+    <div class="col-lg-4 col-md-6 col-xs-12">
         <rd-widget>
             <rd-widget-body>
                 <div class="widget-icon orange pull-left">
@@ -38,21 +39,10 @@
             </rd-widget-body>
         </rd-widget>
     </div>
-    <div class="col-lg-3 col-md-6 col-xs-12">
-        <rd-widget>
-            <rd-widget-body>
-                <div class="widget-icon blue pull-left">
-                    <i class="fa fa-support"></i>
-                </div>
-                <div class="title">62</div>
-                <div class="comment">Tickets</div>
-            </rd-widget-body>
-        </rd-widget>
-    </div>
 </div>
 
 <div class="row" ng-controller="DashboardController">
-    <button ng-click="debug()">debug</button>
+    <!--<button ng-click="debug()">debug</button>-->
     <div class="row">
         <div class="col-sm-4" layout="column" ng-repeat="(name, data) in user.People" ng-click="goToPerson(name)">
             <div class="profileCard">

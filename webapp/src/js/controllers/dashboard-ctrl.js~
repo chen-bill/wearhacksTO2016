@@ -1,5 +1,4 @@
-angular.module('RDash').controller('DashboardController', ['$scope', '$firebaseObject', '$location',
-    function($scope, $firebaseObject, $location) {
+angular.module('RDash').controller('DashboardController', ['$scope', '$firebaseObject', '$location', function($scope, $firebaseObject, $location) {
         var ref = new Firebase("https://watchdog-app.firebaseio.com/Bill");
         var refSync = $firebaseObject(ref);
         $scope.user = {};
@@ -35,7 +34,6 @@ angular.module('RDash').controller('DashboardController', ['$scope', '$firebaseO
         };
 
         $scope.getNumberOfIssues = function(requests){
-            console.log('getting issues');
             var number = 0;
             if(requests){
                 for(var person in $scope.user.People){
@@ -58,8 +56,8 @@ angular.module('RDash').controller('DashboardController', ['$scope', '$firebaseO
         };
 
         $scope.goToPerson = function(name) {
-            console.log($scope.user.id + '/people/' + name);
-            $location.path($scope.user.id + '/people/' + name);
+            console.log($scope.user.id + '/profiles/' + name);
+            $location.path($scope.user.id + '/profiles/' + name);
         };
 
         $scope.getMostRecentTime = function(object) {

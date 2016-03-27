@@ -11,8 +11,8 @@ angular.module('RDash').config(['$stateProvider', '$urlRouterProvider',
                 templateUrl: 'templates/dashboard.html',
             })
             .state('profile', {
-                url: '/:user/profiles/:profile',
-                templateUrl: 'templates/dashboard.html',
+                url: '/bill/profiles/:name',
+                templateUrl: 'templates/profile.html'
             })
             .state('tables', {
                 url: '/tables',
