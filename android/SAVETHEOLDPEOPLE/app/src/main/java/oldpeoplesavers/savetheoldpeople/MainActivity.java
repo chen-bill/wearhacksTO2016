@@ -1,7 +1,7 @@
 package oldpeoplesavers.savetheoldpeople;
 
 import android.Manifest;
-import android.app.Activity;
+import android.content.DialogInterface;
 import android.content.pm.PackageManager;
 import android.location.Address;
 import android.location.Geocoder;
@@ -9,6 +9,7 @@ import android.location.Location;
 import android.os.AsyncTask;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -30,14 +31,14 @@ import com.microsoft.band.BandException;
 import com.microsoft.band.BandIOException;
 import com.microsoft.band.BandInfo;
 import com.microsoft.band.ConnectionState;
-import com.microsoft.band.UserConsent;
+import com.microsoft.band.sensors.BandAccelerometerEvent;
+import com.microsoft.band.sensors.BandAccelerometerEventListener;
 import com.microsoft.band.sensors.BandHeartRateEvent;
 import com.microsoft.band.sensors.BandHeartRateEventListener;
-import com.microsoft.band.sensors.HeartRateConsentListener;
 import com.microsoft.band.sensors.HeartRateQuality;
+import com.microsoft.band.sensors.SampleRate;
 
 import java.io.IOException;
-import java.lang.ref.WeakReference;
 import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
@@ -49,19 +50,18 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
     TextView dataView;
     TextView heartRateView;
     TextView curAdd;
-    Button btnStart;
-    Button updateLocation;
-    Button btnStop;
+    Button helpMe;
 
-    Firebase mikelocRef;
-    Firebase mikerateRef;
+    Firebase andrewlocRef;
+    Firebase andrewrateRef;
+    Firebase andrewfell;
+    Firebase andrewhelp;
 
     private BandClient client = null;
 
     GoogleApiClient mGoogleApiClient;
     Location mLastLocation;
 
-    long lastTimeStamp = 0;
     long currentTimeStamp = 0;
 
     private LocationRequest mLocationRequest;
@@ -79,16 +79,16 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
         setContentView(R.layout.activity_main);
 
         Firebase myFirebaseRef = new Firebase("https://watchdog-app.firebaseio.com/");
-        mikelocRef = new Firebase("https://watchdog-app.firebaseio.com/Bill/People/Mike/location");
-        mikerateRef = new Firebase("https://watchdog-app.firebaseio.com/Bill/People/Mike/heartRate");
+        andrewlocRef = new Firebase("https://watchdog-app.firebaseio.com/Bill/People/Andrew/location");
+        andrewrateRef = new Firebase("https://watchdog-app.firebaseio.com/Bill/People/Andrew/heartRate");
+        andrewfell = new Firebase("https://watchdog-app.firebaseio.com/Bill/People/Andrew/fellDown");
+        andrewhelp = new Firebase("https://watchdog-app.firebaseio.com/Bill/People/Andrew/needsHelp");
+
 
         dataView = (TextView) findViewById(R.id.data);
         heartRateView = (TextView) findViewById(R.id.sensorData);
 
-        btnStart = (Button) findViewById(R.id.startButton);
-        btnStop = (Button) findViewById(R.id.stopButton);
-
-        updateLocation = (Button) findViewById(R.id.updateLocation);
+        helpMe = (Button) findViewById(R.id.requestHelp);
 
         mLatitudeText = (TextView) findViewById(R.id.lat);
         mLongitudeText = (TextView) findViewById(R.id.lon);
@@ -117,37 +117,32 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
             }
         });
 
-        btnStart.setOnClickListener(new View.OnClickListener() {
+        new HeartRateSubscriptionTask().execute();
+
+        helpMe.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                heartRateView.setText("");
-                new HeartRateSubscriptionTask().execute();
+                AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
+                builder.setMessage("Are you sure?").setPositiveButton("Yes", dialogClickListener)
+                        .setNegativeButton("Cancel",dialogClickListener).show();
             }
         });
-
-        btnStop.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                try {
-                    client.getSensorManager().unregisterHeartRateEventListener(mHeartRateEventListener);
-                } catch (BandIOException e) {
-                    e.printStackTrace();
-                }
-            }
-        });
-
-        updateLocation.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                try {
-                    getLocation();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            }
-        });
-
     }
+
+    DialogInterface.OnClickListener dialogClickListener = new DialogInterface.OnClickListener() {
+        @Override
+        public void onClick(DialogInterface dialog, int which) {
+            switch (which){
+                case DialogInterface.BUTTON_POSITIVE:
+                    andrewhelp.setValue(true);
+                    break;
+
+                case DialogInterface.BUTTON_NEGATIVE:
+                    //No button clicked
+                    break;
+            }
+        }
+    };
 
     public long getCurrentTime(){
         //Divide by 1000 to get seconds
@@ -184,11 +179,28 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
                 if (getCurrentTime() >= currentTimeStamp+5){
                     currentTimeStamp = getCurrentTime();
                     if(event.getQuality() == HeartRateQuality.LOCKED){
-                        mikerateRef.child(Long.toString(currentTimeStamp)).setValue(event.getHeartRate());
+                        andrewrateRef.child(Long.toString(currentTimeStamp)).setValue(event.getHeartRate());
                     }else{
-                        mikerateRef.child(Long.toString(currentTimeStamp)).setValue(-1);
+                        andrewrateRef.child(Long.toString(currentTimeStamp)).setValue(-1);
                     }
                 }
+            }
+        }
+    };
+
+
+    private BandAccelerometerEventListener mAccelerometerEventListener = new BandAccelerometerEventListener() {
+        @Override
+        public void onBandAccelerometerChanged(final BandAccelerometerEvent event) {
+            if (event != null) {
+
+                double mag = Math.pow(event.getAccelerationX(),2) + Math.pow(event.getAccelerationY(),2) + Math.pow(event.getAccelerationZ(), 2);
+                if(mag > 7){
+                    System.out.println(mag);
+                    Log.d("STROKESTROKESTROKE", "I'M HAVING A STROKE");
+                    andrewfell.setValue(true);
+                }
+
             }
         }
     };
@@ -224,7 +236,7 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
             locationRef.put("lat", mLastLocation.getLatitude());
             locationRef.put("lng", mLastLocation.getLongitude());
 
-            mikelocRef.updateChildren(locationRef);
+            andrewlocRef.updateChildren(locationRef);
             Geocoder geocoder = new Geocoder(this, Locale.getDefault());
             Address address = geocoder.getFromLocation(mLastLocation.getLatitude(), mLastLocation.getLongitude(),1).get(0);
 
@@ -277,6 +289,8 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
             try {
                 if (getConnectedBandClient()) {
                         client.getSensorManager().registerHeartRateEventListener(mHeartRateEventListener);
+                        client.getSensorManager().registerAccelerometerEventListener(mAccelerometerEventListener, SampleRate.MS128);
+
                 } else {
                     appendToUI("Band isn't connected. Please make sure bluetooth is on and the band is in range.\n");
                 }

@@ -15,25 +15,12 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="Hello World!" />
-
-
+    
     <Button
-        android:id="@+id/startButton"
+        android:id="@+id/requestHelp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Monitor Heartrate"/>
-
-    <Button
-        android:id="@+id/stopButton"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Stop Monitoring"/>
-
-    <Button
-        android:id="@+id/updateLocation"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Update Location"/>
+        android:text="Request Help"/>
 
     <TextView
         android:id="@+id/sensorData"
