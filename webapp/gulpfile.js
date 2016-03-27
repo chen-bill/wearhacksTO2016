@@ -57,7 +57,7 @@ gulp.task('custom-images', function() {
 
 gulp.task('custom-js', function() {
     return gulp.src(paths.scripts)
-        //.pipe(minifyJs())
+        .pipe(minifyJs())
         .pipe(ngmin({dynamic: true}))
         .pipe(concat('dashboard.min.js'))
         .pipe(gulp.dest('dist/js'));
@@ -75,9 +75,7 @@ gulp.task('custom-templates', function() {
         .pipe(gulp.dest('dist/templates'));
 });
 
-/**
- * Watch custom files
- */
+
 gulp.task('watch', function() {
     gulp.watch([paths.images], ['custom-images']);
     gulp.watch([paths.styles], ['custom-less']);
