@@ -1,20 +1,27 @@
 <div ng-controller="MapController">
     <div id="map"></div>
-<!--     <div id="class" ng-repeat="marker in markers | orderBy : 'title'">
-         <a href="#" ng-click="openInfoWindow($event, marker)">{{marker.title}}</a>
-    </div> -->
+    <!--     <div id="class" ng-repeat="marker in markers | orderBy : 'title'">
+        <a href="#" ng-click="openInfoWindow($event, marker)">{{marker.title}}</a>
+        </div> -->
 
-	<div class="row" style="padding-top: 20px">
-        <div class="col-sm-4" layout="column" ng-repeat="marker in markers | orderBy : 'title'" ng-click="openInfoWindow($event, marker)">
-            <div class="profileCard">
-                <div class="cardTitle" ng-style="{{styles[marker.title]}}">
-                    <h3 class="headline">{{marker.title}}</h3>
+        <div class="row" style="padding-top: 20px">
+            <div class="col-sm-4" layout="column" ng-repeat="marker in markers | orderBy : 'title'" ng-click="openInfoWindow($event, marker)">
+                <div class="profileCard">
+                    <div class="cardTitle" ng-style="{{styles[marker.title]}}">
+                        <h3 class="headline">{{marker.title}}</h3>
+                    </div>
+                    <img class="profilePic" ng-src="{{profilePics[marker.title]}}"/>
+                    <div class="cardBody">
+                        {{geoLocations[marker.title]}}
+                    </div>
                 </div>
-                <img class="profilePic" ng-src="{{profilePics[marker.title]}}"/>
-                <div class="cardBody">
-					{{geoLocations[marker.title]}}
+            </div>
+            <div class="col-sm-4" layout="column">
+                <div class="profileCard">
+                    <div style="text-align: center; font-size: 100px; height: 200px; padding-top: 32px; background-color: #D8D8D8 ; color: white; border: #909090 1px solid">
+                        +
+                    </div>
                 </div>
             </div>
         </div>
-    </div>
 </div>

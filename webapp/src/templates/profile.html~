@@ -24,14 +24,14 @@
     </div>
     <div class="data-panel" style="width: 70%; height: 100%; float:left; max-height: calc(100vh - 75px); overflow: auto">
         <div class="row dataMetric">
-            <div class="col-sm-8">
+            <div class="col-sm-10">
                 <h3>Heart Rate</h3>
                 <canvas id="line" class="chart chart-line" chart-data="heartrateValues"
                     chart-labels="heartrateTimes"  chart-series="series" chart-options="heartrateOptions"
                     chart-click="onClick" style="">
                 </canvas> 
             </div>
-            <div class="col-sm-4" style="margin-top:55px;">
+            <div class="col-sm-2" style="margin-top:55px;">
                 <label>Max heartrate:</label><br>
                 <input type="number" value="{{profile.settings.hearthreateHighThreshold}}" ng-model="profile.settings.hearthreateHighThreshold"><br>
                 <label>Min heartrate:</label><br>
@@ -40,7 +40,7 @@
         </div>
         <div class="row dataMetric">
             <div class="col-sm-12" style="max-height: 400px; overflow: auto">
-                <h3>Logs</h3>
+                <h3>Activity logs</h3>
                 <div>
                     <timeline>
                         <timeline-event ng-repeat="memo in profile.memos" side="right">
