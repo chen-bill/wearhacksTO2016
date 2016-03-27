@@ -4,6 +4,7 @@ import android.Manifest;
 import android.app.Activity;
 import android.content.DialogInterface;
 import android.content.pm.PackageManager;
+import android.graphics.Color;
 import android.location.Address;
 import android.location.Geocoder;
 import android.location.Location;
@@ -51,15 +52,17 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
 ,GoogleApiClient.OnConnectionFailedListener, com.google.android.gms.location.LocationListener,
         ActivityCompat.OnRequestPermissionsResultCallback{
 
-    TextView dataView;
+    TextView nameView;
     TextView heartRateView;
     TextView curAdd;
-    Button helpMe;
+    TextView rateView;
 
     Firebase andrewlocRef;
     Firebase andrewrateRef;
     Firebase andrewfell;
     Firebase andrewhelp;
+
+    MorphingButton btnMorph;
 
     private BandClient client = null;
 
@@ -91,28 +94,20 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
 
         new HeartRateConsentTask().execute(reference);
 
-        dataView = (TextView) findViewById(R.id.data);
+        nameView = (TextView) findViewById(R.id.name);
         heartRateView = (TextView) findViewById(R.id.sensorData);
+        rateView = (TextView) findViewById(R.id.rate);
 
-        helpMe = (Button) findViewById(R.id.requestHelp);
         // sample demonstrate how to morph button to green circle with icon
-        final MorphingButton btnMorph = (MorphingButton) findViewById(R.id.btnMorph);
+        btnMorph = (MorphingButton) findViewById(R.id.btnMorph);
 
         btnMorph.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                MorphingButton.Params circle = MorphingButton.Params.create()
-                        .duration(500)
-                        .cornerRadius(256) // 56 dp// 56 dp
-                        .width(256)
-                        .height(256)
-                        .color(R.color.morphColour) // normal state color
-                        .colorPressed(R.color.morphPressed) // pressed state color
-                        .icon(R.drawable.ic_done_white_48dp); // icon
-                btnMorph.morph(circle);
-
+                AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
+                builder.setMessage("Are you sure?").setPositiveButton("Yes", dialogClickListener)
+                        .setNegativeButton("Cancel",dialogClickListener).show();
             }
-
         });
 
         mLatitudeText = (TextView) findViewById(R.id.lat);
@@ -143,15 +138,6 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
         });
 
         new HeartRateSubscriptionTask().execute();
-
-        helpMe.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
-                builder.setMessage("Are you sure?").setPositiveButton("Yes", dialogClickListener)
-                        .setNegativeButton("Cancel",dialogClickListener).show();
-            }
-        });
     }
 
     DialogInterface.OnClickListener dialogClickListener = new DialogInterface.OnClickListener() {
@@ -160,6 +146,27 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
             switch (which){
                 case DialogInterface.BUTTON_POSITIVE:
                     andrewhelp.setValue(true);
+                    MorphingButton.Params circle = MorphingButton.Params.create()
+                            .duration(500)
+                            .cornerRadius(256) // 56 dp// 56 dp
+                            .width(256)
+                            .height(256)
+                            .color(Color.parseColor("#BBDEFB")) // normal state color
+                            .icon(R.drawable.ic_done_white_48dp); // icon
+                    btnMorph.morph(circle);
+
+                    btnMorph.postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+                            MorphingButton.Params rekt = MorphingButton.Params.create()
+                                    .duration(500)
+                                    .width(670)
+                                    .height(150)
+                                    .color(Color.parseColor("#F44336"))
+                                    .text("Request Help");
+                            btnMorph.morph(rekt);
+                        }
+                    }, 2000);
                     break;
 
                 case DialogInterface.BUTTON_NEGATIVE:
@@ -194,12 +201,23 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
         });
     }
 
+    private void appendToRate(final String string){
+        this.runOnUiThread(new Runnable(){
+            @Override
+            public void run(){
+                rateView.setText(string);
+            }
+        });
+    }
+
     private BandHeartRateEventListener mHeartRateEventListener = new BandHeartRateEventListener() {
         @Override
         public void onBandHeartRateChanged(final BandHeartRateEvent event) {
             if (event != null) {
                 appendToUI(String.format("Heart Rate = %d beats per minute\n"
                         + "Quality = %s\n", event.getHeartRate(), event.getQuality()));
+
+                appendToRate(String.format("Current Heart Rate: %d", event.getHeartRate()));
 
                 if (getCurrentTime() >= currentTimeStamp+5){
                     currentTimeStamp = getCurrentTime();
