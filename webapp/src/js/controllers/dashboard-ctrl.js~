@@ -75,10 +75,11 @@ angular.module('RDash').controller('DashboardController', ['$scope', '$firebaseO
             var newAlertsArray = [];
             for(var person in newVal) {
                 var keys = Object.keys(newVal[person].heartRate);
-                //console.log(newVal[person].heartRate[keys[keys.length-1]]);
-                //console.log(newVal[person].settings.heartrateHighThreshold);
-                //console.log(newVal[person].heartRate[keys[keys.length-1]] >= newVal[person].settings.heartrateHighThreshold);
-                //console.log(newVal[person].heartRate[keys[keys.length-1]] <= newVal[person].settings.heartrateLowThreshold && newVal[person].heartRate[keys[keys.length-1]] > 1);
+                console.log(newVal[person].heartRate[keys[keys.length-1]]);
+                console.log(newVal[person].settings.heartrateHighThreshold);
+                console.log(newVal[person].heartRate[keys[keys.length-1]] >= newVal[person].settings.heartrateHighThreshold);
+                console.log(newVal[person].heartRate[keys[keys.length-1]] <= newVal[person].settings.heartrateLowThreshold && newVal[person].heartRate[keys[keys.length-1]] > 1);
+
                 if(newVal[person].heartRate[keys[keys.length-1]] >= newVal[person].settings.heartrateHighThreshold || 
                    (newVal[person].heartRate[keys[keys.length-1]] <= newVal[person].settings.heartrateLowThreshold && newVal[person].heartRate[keys[keys.length-1]] > 1)){
                     console.log('heart rate threshold ' + person);

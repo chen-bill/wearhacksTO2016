@@ -1,6 +1,6 @@
 <div ng-controller="ProfilesCtrl">
     <!--<button ng-click="debug()">button</button>-->
-    <div class="contact-panel" style="width: 30%; height: calc(100vh - 75px); right: 0; top: 60px; margin-top:10px; border-left: 1px #e9e9e9 solid;">
+    <div class="contact-panel" style="width: 30%; height: calc(100vh - 90px); right: 0; top: 60px; margin-top:10px; border-left: 1px #e9e9e9 solid;">
         <div style="background-color: blue; width: 100%; height: 40vh; text-align: center" ng-style="getStyle(profile.status)">
             <h1 style="margin: 0; padding-top: 15px; padding-bottom: 10px"> {{profile.contactInformation.fullName}}</h1>
             <img ng-src="{{profile.profilePic}}" style="width: 60%; border-radius: 50%"/>
@@ -13,10 +13,10 @@
                 <p>Address: {{profile.contactInformation.address}}</p>
                 <p>Email: {{profile.contactInformation.email}}</p>
             </div>
-            <div>
+            <div ng-show="profile.alerts">
                 <h3>Notifications</h3>
                 <p>Click to resolve</p>
-                <div style="width: 95%; margin: 2.5%; padding: 10px" ng-style="getStyle(profile.status)" ng-repeat="(key, value) in profile.alerts" ng-click="deleteAlert(key)">
+                <div style="width: 95%; margin: 2.5%; padding: 10px; cursor: pointer" ng-style="getStyle(profile.status)" ng-repeat="(key, value) in profile.alerts" ng-click="deleteAlert(key)">
                     <b>{{value}}</b>
                 </div>
             </div>
@@ -40,7 +40,7 @@
         </div>
         <div class="row dataMetric">
             <div class="col-sm-12" style="max-height: 400px; overflow: auto">
-                <h3>Memos</h3>
+                <h3>Activity logs</h3>
                 <div>
                     <timeline>
                         <timeline-event ng-repeat="memo in profile.memos" side="right">
