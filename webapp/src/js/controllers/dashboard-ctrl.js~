@@ -1,8 +1,12 @@
 angular.module('RDash').controller('DashboardController', ['$scope', '$firebaseObject', '$location', function($scope, $firebaseObject, $location) {
+        $scope.loading = true;
         var ref = new Firebase("https://watchdog-app.firebaseio.com/Bill");
         var refSync = $firebaseObject(ref);
         $scope.user = {};
-        refSync.$bindTo($scope, "user");
+        refSync.$loaded().then(function() {
+            refSync.$bindTo($scope, "user");
+            $scope.loading = false;
+        });
 
         $scope.getStyle = function(status) {
             if (status === 0) {

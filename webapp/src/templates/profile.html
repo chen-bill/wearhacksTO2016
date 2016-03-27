@@ -1,12 +1,38 @@
 <div ng-controller="ProfilesCtrl">
     <!--<button ng-click="debug()">button</button>-->
     <div class="row">
-        <div class="col-sm-8">
-            <h3>Heart Rate</h3>
-            <canvas id="line" class="chart chart-line" chart-data="heartrateValues"
-              chart-labels="heartrateTimes"  chart-series="series" chart-options="heartrateOptions"
-              chart-click="onClick" style="">
-            </canvas> 
+	<div class="col-sm-8">
+	    <h3>Heart Rate</h3>
+	    <canvas id="line" class="chart chart-line" chart-data="heartrateValues"
+		chart-labels="heartrateTimes"  chart-series="series" chart-options="heartrateOptions"
+		chart-click="onClick" style="">
+	    </canvas> 
+	</div>
+	<div class="col-sm-4">
+	    <h3>Settings</h3>
         </div>
+    </div>
+    <div class="row">
+        <div class="col-sm-4">
+            value
+        </div>
+	<div class="col-sm-8" style="max-height: 600px">
+	    <h3>Memos</h3>
+            <div>
+                <timeline>
+                    <timeline-event ng-repeat="event in events" side="right">
+                        <timeline-badge class="{{event.badgeClass}}">
+                            <i class="glyphicon {{event.badgeIconClass}}"></i>
+                        </timeline-badge>
+                        <timeline-panel class="{{event.badgeClass}}">
+                            <timeline-heading>
+                                <h4>{{event.title}}</h4>
+                            </timeline-heading>
+                            <p>{{event.content}}</p>
+                        </timeline-panel>
+                    </timeline-event>
+                </timeline>
+            </div>
+	</div>
     </div>
 </div>

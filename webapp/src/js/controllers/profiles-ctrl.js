@@ -46,20 +46,20 @@ angular.module('RDash')
                 if ($scope.heartrateTimes.length > datapoints) {
                     $scope.heartrateTimes.splice(0, 1);
                     $scope.heartrateValues[0].splice(0, 1);
-                    if ($scope.profile.heartRate[timestampKeys[timestampKeys.length-1]] === -1) {
+                    if ($scope.profile.heartRate[timestampKeys[timestampKeys.length - 1]] === -1) {
                         $scope.heartrateValues[0].push(0);
                     } else {
-                        $scope.heartrateValues[0].push($scope.profile.heartRate[timestampKeys[timestampKeys.length-1]]);
+                        $scope.heartrateValues[0].push($scope.profile.heartRate[timestampKeys[timestampKeys.length - 1]]);
                     }
                 } else {
                     $scope.heartrateValues[0].push($scope.profile.heartRate[timestampKeys[timestampKeys.length - 1]]);
                 }
-                var date = new Date(timestampKeys[timestampKeys.length-1] * 1000);
+                var date = new Date(timestampKeys[timestampKeys.length - 1] * 1000);
                 var hours = date.getHours();
                 var minutes = date.getMinutes();
                 var seconds = date.getSeconds();
-                if(timestampCounter % 5 == 4){
-                    $scope.heartrateTimes.push(hours + ":" +  minutes + ":" + seconds);
+                if (timestampCounter % 5 == 4) {
+                    $scope.heartrateTimes.push(hours + ":" + minutes + ":" + seconds);
                     timestampCounter = 0;
                 } else {
                     $scope.heartrateTimes.push(' ');
@@ -81,8 +81,8 @@ angular.module('RDash')
                     var hours = date.getHours();
                     var minutes = date.getMinutes();
                     var seconds = date.getSeconds();
-                    if(timestampCounter % 5 == 4){
-                        $scope.heartrateTimes.push(hours + ":" +  minutes + ":" + seconds);
+                    if (timestampCounter % 5 == 4) {
+                        $scope.heartrateTimes.push(hours + ":" + minutes + ":" + seconds);
                         timestampCounter = 0;
                     } else {
                         $scope.heartrateTimes.push(' ');
@@ -96,5 +96,21 @@ angular.module('RDash')
                     }
                 }
             };
+
+//----------------------------------------------------------events
+
+            $scope.events = [{
+                badgeClass: 'info',
+                badgeIconClass: 'glyphicon-check',
+                title: 'First heading',
+                content: 'Some awesome content.'
+
+            }, {
+                badgeClass: 'warning',
+                badgeIconClass: 'glyphicon-credit-card',
+                title: 'Second heading',
+                content: 'More awesome content.'
+
+            }];
         }
     ]);

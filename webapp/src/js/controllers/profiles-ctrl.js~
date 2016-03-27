@@ -58,7 +58,7 @@ angular.module('RDash')
                 var hours = date.getHours();
                 var minutes = date.getMinutes();
                 var seconds = date.getSeconds();
-                if(timestampCounter % 6 == 5){
+                if(timestampCounter % 5 == 4){
                     $scope.heartrateTimes.push(hours + ":" +  minutes + ":" + seconds);
                     timestampCounter = 0;
                 } else {
@@ -81,7 +81,7 @@ angular.module('RDash')
                     var hours = date.getHours();
                     var minutes = date.getMinutes();
                     var seconds = date.getSeconds();
-                    if(timestampCounter % 6 == 5){
+                    if(timestampCounter % 5 == 4){
                         $scope.heartrateTimes.push(hours + ":" +  minutes + ":" + seconds);
                         timestampCounter = 0;
                     } else {
